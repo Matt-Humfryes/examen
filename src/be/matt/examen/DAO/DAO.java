@@ -1,6 +1,10 @@
 package be.matt.examen.DAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class DAO<T> {
 	protected Connection connect = null;

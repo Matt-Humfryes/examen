@@ -10,7 +10,7 @@ import be.matt.examen.POJO.LessonType;
 import be.matt.examen.POJO.Period;
 import be.matt.examen.POJO.Skier;
 
-public class DAOFactory {
+public class DAOFactory extends AbstractDAOFactory {
 	protected static final Connection conn = DBConnection.getInstance();
 	
 	public DAO<Skier> getSkierDAO()

@@ -17,13 +17,13 @@ public class DBConnection {
 			String url = "jdbc:ucanaccess://./DB.accdb";
 			instance = DriverManager.getConnection(url);
 		}
-			catch(ClassNotFoundException ex)
+		catch(ClassNotFoundException ex)
 		{
 			JOptionPane.showMessageDialog(null, "Classe de driver introuvable"
 			+ ex.getMessage());
 			System.exit(0);
 		}
-			catch (SQLException ex) 
+		catch (SQLException ex) 
 		{
 			JOptionPane.showMessageDialog(null, "Erreur JDBC : " +
 			ex.getMessage());
