@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import be.matt.examen.POJO.LessonType;
 import be.matt.examen.POJO.Skier;
 
 public class SkierDAO extends DAO<Skier> {
@@ -77,7 +78,36 @@ public class SkierDAO extends DAO<Skier> {
 
 	@Override
 	public ArrayList<Skier> getAll() {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		ArrayList<Skier> list = new ArrayList<Skier>();
+		
+		try
+		{
+			
+			String check = "SELECT Lastname, Firstname, Username, Age, Password FROM Skier";
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				String name = res.getString(1);
+				String firstname = res.getString(2);
+				String username = res.getString(3);
+				int age = res.getInt(4);
+				String password = res.getString(5);
+				
+				Skier skier = new Skier(name, firstname, password, age, username);
+				list.add(skier);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 }

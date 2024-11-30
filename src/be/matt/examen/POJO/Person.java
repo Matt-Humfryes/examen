@@ -1,5 +1,9 @@
 package be.matt.examen.POJO;
 
+import be.matt.examen.GetAllCourses;
+import be.matt.examen.DAO.AbstractDAOFactory;
+import be.matt.examen.DAO.DAO;
+
 public abstract class Person {
 	private String name;
 	private String firstname;
@@ -58,5 +62,34 @@ public abstract class Person {
 	public void setUsername(String val)
 	{
 		username = val;
+	}
+	
+	public static String checkLog(String uname, String psswrd)
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Skier> daoS = adf.getSkierDAO();
+		DAO<Instructor> daoI = adf.getInstructorDAO();
+		
+		for(Skier i : daoS.getAll())
+		{
+			if(uname.equals(i.getUsername()) && psswrd.equals(i.getPassword()))
+			{
+				Skier skier = new Skier(i.getName(), i.getFirstname(), psswrd, i.getAge(), uname);
+				
+				GetAllCourses.askCourses(skier);
+				
+				return "skier";
+			}
+		}
+		
+		for(Instructor i: daoI.getAll())
+		{
+			if(uname.equals(i.getUsername()) && psswrd.equals(i.getPassword()))
+			{
+				return "instructor";
+			}
+		}
+		
+		return "none";
 	}
 }

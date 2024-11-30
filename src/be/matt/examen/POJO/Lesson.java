@@ -1,5 +1,7 @@
 package be.matt.examen.POJO;
 
+import java.util.ArrayList;
+
 import be.matt.examen.DAO.AbstractDAOFactory;
 import be.matt.examen.DAO.DAO;
 
@@ -21,6 +23,25 @@ public class Lesson {
 		isMorning = time;
 		
 		amountStudent = 0;
+	}
+	
+	public Lesson(int min, int max, boolean time, String sport, String level, boolean child, int price, int instructorId, int students)
+	{
+		minBookings = min;
+		maxBookings = max;
+		isMorning = time;
+		amountStudent = students;
+		
+		this.createWithInstructor(sport, level, child, price, instructorId);
+	}
+	
+	private void createWithInstructor(String sport, String level, boolean child, int price, int instructorId)
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Instructor> dao = adf.getInstructorDAO();
+		
+		Instructor i = dao.find(instructorId);
+		instructor = new Instructor(i.getName(), i.getFirstname(), i.getAge(), i.getUsername(), sport, level, child, price, this);
 	}
 
 	public int getMinBookings()
@@ -79,5 +100,16 @@ public class Lesson {
 		DAO<Lesson> dao = adf.getLessonDAO();
 		
 		return dao.create(this);
+	}
+	
+	public static ArrayList<Lesson> getCourses()
+	{
+		ArrayList<Lesson> list = new ArrayList<Lesson>();
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Lesson> dao = adf.getLessonDAO();
+		
+		list = dao.getAll();
+		
+		return list;
 	}
 }

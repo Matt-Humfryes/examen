@@ -18,6 +18,25 @@ public class Instructor extends Person {
 		this.signInCourse(sport, level, child, time);
 	}
 	
+	public Instructor(String name, String firstname, int age, String username, String sport, String level, boolean child, int price, Lesson l){
+		super(name, firstname, "", age, username);
+		
+		this.setLessonType(sport, level, child, price, l);
+	}
+	
+	private void setLessonType(String sport, String level, boolean child, int price, Lesson l)
+	{
+		lessons = new ArrayList<Lesson>();
+		lessons.add(l);
+		accreditations = new ArrayList<Accreditation>();
+		
+		Accreditation accreditation = new Accreditation(sport, level, child, price);
+		accreditations.add(accreditation);
+		
+		LessonType lt = accreditations.get(0).getLessonType(0);
+		lessons.getLast().setLessonType(lt);
+	}
+	
 	private void signInCourse(String sport, String level, boolean child, boolean time) throws Exception
 	{
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);

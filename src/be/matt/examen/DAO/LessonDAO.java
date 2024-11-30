@@ -87,7 +87,42 @@ public class LessonDAO extends DAO<Lesson> {
 
 	@Override
 	public ArrayList<Lesson> getAll() {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		ArrayList<Lesson> list = new ArrayList<Lesson>();
+		
+		try
+		{
+			
+			String check = "SELECT L.minBookings, L.maxBookings, L.duringMorning, L.studentAmount, LT.sport, LT.level, LT.forChildren, LT.price, L.InstructorID FROM Lesson L INNER JOIN LessonType LT ON L.LessonTypeID = LT.ID";
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				int min = res.getInt(1);
+				int max = res.getInt(2);
+				boolean time = res.getBoolean(3);
+				int students = res.getInt(4);
+				
+				String sport = res.getString(5);
+				String level = res.getString(6);
+				boolean child = res.getBoolean(7);
+				int price = res.getInt(8);
+				
+				int instructorId = res.getInt(9);
+				
+				Lesson l = new Lesson(min, max, time, sport, level, child, price, instructorId, students);
+				list.add(l);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 }

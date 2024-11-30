@@ -68,6 +68,16 @@ public class MainFrame extends JFrame {
 		contentPane.add(btnNewInstructor);
 		
 		JButton btnLogIn = new JButton("Log in");
+		btnLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					LogIn logInForm = new LogIn();
+					logInForm.setVisible(true);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
 		contentPane.add(btnLogIn);
 	}
 
