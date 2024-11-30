@@ -1,5 +1,8 @@
 package be.matt.examen.POJO;
 
+import be.matt.examen.DAO.AbstractDAOFactory;
+import be.matt.examen.DAO.DAO;
+
 public class Lesson {
 	private int minBookings;
 	private int maxBookings;
@@ -8,6 +11,17 @@ public class Lesson {
 	
 	private Instructor instructor;
 	private LessonType lessonType;
+	
+	public Lesson(Instructor i, LessonType lt, int min, int max, boolean time)
+	{
+		instructor = i;
+		lessonType = lt;
+		minBookings = min;
+		maxBookings = max;
+		isMorning = time;
+		
+		amountStudent = 0;
+	}
 
 	public int getMinBookings()
 	{
@@ -57,5 +71,13 @@ public class Lesson {
 	public void setLessonType(LessonType val)
 	{
 		lessonType = val;
+	}
+	
+	public boolean addToDB()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Lesson> dao = adf.getLessonDAO();
+		
+		return dao.create(this);
 	}
 }

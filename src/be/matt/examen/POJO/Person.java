@@ -16,6 +16,8 @@ public abstract class Person {
 		this.username = username;
 	}
 	
+	public abstract boolean addToDB();
+	
 	public String getName()
 	{
 		return name;

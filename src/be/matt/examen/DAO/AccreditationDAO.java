@@ -1,6 +1,7 @@
 package be.matt.examen.DAO;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.matt.examen.POJO.Accreditation;
 
@@ -27,6 +28,11 @@ public class AccreditationDAO extends DAO<Accreditation> {
 
 	@Override
 	public Accreditation find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Accreditation> getAll() {
 		return null;
 	}
 

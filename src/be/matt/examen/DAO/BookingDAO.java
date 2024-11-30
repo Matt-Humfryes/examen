@@ -1,6 +1,7 @@
 package be.matt.examen.DAO;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.matt.examen.POJO.Booking;
 
@@ -27,6 +28,11 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public Booking find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Booking> getAll() {
 		return null;
 	}
 

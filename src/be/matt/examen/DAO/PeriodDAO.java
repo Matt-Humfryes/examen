@@ -1,6 +1,7 @@
 package be.matt.examen.DAO;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import be.matt.examen.POJO.Period;
 
@@ -27,6 +28,11 @@ public class PeriodDAO extends DAO<Period> {
 
 	@Override
 	public Period find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Period> getAll() {
 		return null;
 	}
 

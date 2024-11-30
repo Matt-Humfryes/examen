@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import be.matt.examen.POJO.Skier;
 
@@ -24,6 +25,16 @@ public class SkierDAO extends DAO<Skier> {
 			ResultSet resSet = null;
 			
 			String check = "SELECT Username FROM Skier WHERE Username = '" + obj.getUsername() + "'";
+			stat = connect.createStatement();
+			
+			resSet = stat.executeQuery(check);
+			
+			if(resSet.next())
+			{
+				possible = false;
+			}
+			
+			check = "SELECT Username FROM Instructor WHERE Username = '" + obj.getUsername() + "'";
 			stat = connect.createStatement();
 			
 			resSet = stat.executeQuery(check);
@@ -61,6 +72,11 @@ public class SkierDAO extends DAO<Skier> {
 
 	@Override
 	public Skier find(int id) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<Skier> getAll() {
 		return null;
 	}
 

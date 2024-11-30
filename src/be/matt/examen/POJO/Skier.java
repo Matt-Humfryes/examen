@@ -50,6 +50,7 @@ public class Skier extends Person {
 		return false;
 	}
 	
+	@Override
 	public boolean addToDB()
 	{
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);

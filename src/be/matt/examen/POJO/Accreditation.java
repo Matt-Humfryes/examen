@@ -7,6 +7,28 @@ public class Accreditation {
 	
 	private ArrayList<LessonType> lessonTypes;
 	
+	public Accreditation(String sport, String level, boolean child, int price)
+	{
+		String firstHalf = sport;
+		String secondHalf;
+		
+		if(child)
+		{
+			secondHalf = "Child";
+		}
+		else
+		{
+			secondHalf = "Adult";
+		}
+		
+		this.name = firstHalf + secondHalf;
+		
+		LessonType lessonType = new LessonType(sport, level, child, price);
+		lessonTypes = new ArrayList<LessonType>();
+		
+		lessonTypes.add(lessonType);
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -38,5 +60,10 @@ public class Accreditation {
 		{
 			lessonTypes.remove(lt);
 		}
+	}
+	
+	public LessonType getLessonType(int target)
+	{
+		return lessonTypes.get(target);
 	}
 }
