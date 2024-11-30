@@ -211,14 +211,128 @@ public class Instructor extends Person {
 				boolean time = l.getMorning();
 				int students = l.getAmountStudent();
 				
+				boolean already = false;
+				
+				String firstHalf = sport;
+				String secondHalf;
+				
+				if(child)
+				{
+					secondHalf = "Child";
+				}
+				else
+				{
+					secondHalf = "Adult";
+				}
+				
+				String nameA = firstHalf + secondHalf;
+				
 				Accreditation a = new Accreditation(sport, level, child, price);
-				accreditations.add(a);
 				
-				LessonType lt = accreditations.getLast().getLessonType(0);
+				for(Accreditation aCheck : accreditations)
+				{
+					if(aCheck.getName().equals(nameA))
+					{
+						already = true;
+						
+						LessonType lt = a.getLessonType(0);
+						
+						aCheck.addLessonType(lt);
+						
+						Lesson lesson = new Lesson(this, lt, min, max, time, students);
+						lessons.add(lesson);
+					}
+				}
 				
-				Lesson lesson = new Lesson(this, lt, min, max, time, students);
-				lessons.add(lesson);
+				if(!already)
+				{
+					accreditations.add(a);
+					
+					LessonType lt = accreditations.getLast().getLessonType(0);
+					
+					Lesson lesson = new Lesson(this, lt, min, max, time, students);
+					lessons.add(lesson);
+				}
 			}
 		}
+	}
+	
+	public static boolean newCourse(String sport, String level, boolean child, boolean time, Instructor i)
+	{
+		if(sport.length() > 0 && level.length() > 0 && (!i.isAccreditate(sport, child)))
+		{
+			try
+			{
+				return i.addCourse(sport, level, child, time);
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isAccreditate(String sport, boolean child)
+	{
+		boolean result = false;
+		
+		for(Accreditation a : accreditations)
+		{
+			for(LessonType lt : a.getLessonTypes())
+			{
+				if(lt.getChildCourse() == child && lt.getSportName().equals(sport))
+				{
+					result = true;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public boolean addCourse(String sport, String level, boolean child, boolean time) throws Exception
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<LessonType> dao = adf.getLessonTypeDAO();
+		int price = 0;
+		
+		for(LessonType i : dao.getAll())
+		{
+			if(i.getSportName().equals(sport) && i.getLevel().equals(level) && i.getChildCourse() == child)
+			{
+				price = i.getPrice();
+			}
+		}
+		if(price == 0)
+		{
+			throw new Exception("Aucun type de lesson ne correspond.");
+		}
+		
+		int min = 0;
+		int max = 0;
+		
+		if(child || sport.equals("snowboard") || level.equals("hors-piste") || level.equals("competition"))
+		{
+			min = 5;
+			max = 8;
+		}
+		else
+		{
+			min = 6;
+			max = 10;
+		}
+		
+		Lesson l = new Lesson(this, sport, level, child, price, min, max, time);
+		
+		lessons.add(l);
+		
+		LessonType lt = lessons.getLast().getLessonType();
+		Accreditation a = new Accreditation(lt);
+		
+		accreditations.add(a);
+		
+		return lessons.getLast().addToDB();
 	}
 }

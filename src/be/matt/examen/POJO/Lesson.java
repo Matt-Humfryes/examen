@@ -25,6 +25,17 @@ public class Lesson {
 		amountStudent = 0;
 	}
 	
+	public Lesson(Instructor i, String sport, String level, boolean child, int price, int min, int max, boolean time)
+	{
+		instructor = i;
+		lessonType = new LessonType(sport, level, child, price);
+		minBookings = min;
+		maxBookings = max;
+		isMorning = time;
+		
+		amountStudent = 0;
+	}
+	
 	public Lesson(int min, int max, boolean time, String sport, String level, boolean child, int price, int instructorId, int students)
 	{
 		minBookings = min;

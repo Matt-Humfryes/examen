@@ -29,6 +29,26 @@ public class Accreditation {
 		lessonTypes.add(lessonType);
 	}
 	
+	public Accreditation(LessonType lt)
+	{
+		String firstHalf = lt.getSportName();
+		String secondHalf;
+		
+		if(lt.getChildCourse())
+		{
+			secondHalf = "Child";
+		}
+		else
+		{
+			secondHalf = "Adult";
+		}
+		
+		this.name = firstHalf + secondHalf;
+		
+		lessonTypes = new ArrayList<LessonType>();
+		lessonTypes.add(lt);
+	}
+	
 	public String getName()
 	{
 		return name;
