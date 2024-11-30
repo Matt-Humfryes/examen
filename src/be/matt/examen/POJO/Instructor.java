@@ -2,6 +2,7 @@ package be.matt.examen.POJO;
 
 import java.util.ArrayList;
 
+import be.matt.examen.SchedulePage;
 import be.matt.examen.DAO.AbstractDAOFactory;
 import be.matt.examen.DAO.DAO;
 
@@ -22,6 +23,15 @@ public class Instructor extends Person {
 		super(name, firstname, "", age, username);
 		
 		this.setLessonType(sport, level, child, price, l);
+	}
+	
+	public Instructor(String name, String firstname, String password, int age, String username) {
+		super(name, firstname, password, age, username);
+		
+		accreditations = new ArrayList<Accreditation>();
+		lessons = new ArrayList<Lesson>();
+		
+		this.getCourseFromDB();
 	}
 	
 	private void setLessonType(String sport, String level, boolean child, int price, Lesson l)
@@ -157,5 +167,58 @@ public class Instructor extends Person {
 		}
 		
 		return false;
+	}
+	
+	public static ArrayList<Lesson> getSchedule(String uname, String psswrd)
+	{
+		ArrayList<Lesson> list = new ArrayList<Lesson>();
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Instructor> daoI = adf.getInstructorDAO();
+		
+		for(Instructor i: daoI.getAll())
+		{
+			if(uname.equals(i.getUsername()) && psswrd.equals(i.getPassword()))
+			{
+				String name = i.getName();
+				String fname = i.getFirstname();
+				int age = i.getAge();
+				
+				Instructor instructor = new Instructor(name, fname, psswrd, age, uname);
+				
+				list = instructor.getLessons();
+			}
+		}
+		
+		return list;
+	}
+	
+	public void getCourseFromDB()
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Lesson> dao = adf.getLessonDAO();
+		
+		for(Lesson l : dao.getAll())
+		{
+			if(l.getInstructor().getUsername().equals(this.getUsername()))
+			{
+				String sport = l.getLessonType().getSportName();
+				String level = l.getLessonType().getLevel();
+				boolean child = l.getLessonType().getChildCourse();
+				int price = l.getLessonType().getPrice();
+				
+				int min = l.getMinBookings();
+				int max = l.getMaxBookings();
+				boolean time = l.getMorning();
+				int students = l.getAmountStudent();
+				
+				Accreditation a = new Accreditation(sport, level, child, price);
+				accreditations.add(a);
+				
+				LessonType lt = accreditations.getLast().getLessonType(0);
+				
+				Lesson lesson = new Lesson(this, lt, min, max, time, students);
+				lessons.add(lesson);
+			}
+		}
 	}
 }

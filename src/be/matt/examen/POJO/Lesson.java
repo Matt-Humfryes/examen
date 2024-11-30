@@ -35,6 +35,16 @@ public class Lesson {
 		this.createWithInstructor(sport, level, child, price, instructorId);
 	}
 	
+	public Lesson(Instructor i, LessonType lt, int min, int max, boolean time, int students)
+	{
+		instructor = i;
+		lessonType = lt;
+		minBookings = min;
+		maxBookings = max;
+		isMorning = time;
+		amountStudent = students;
+	}
+	
 	private void createWithInstructor(String sport, String level, boolean child, int price, int instructorId)
 	{
 		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);

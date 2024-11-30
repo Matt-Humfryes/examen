@@ -1,6 +1,7 @@
 package be.matt.examen.POJO;
 
 import be.matt.examen.GetAllCourses;
+import be.matt.examen.SchedulePage;
 import be.matt.examen.DAO.AbstractDAOFactory;
 import be.matt.examen.DAO.DAO;
 
@@ -86,6 +87,8 @@ public abstract class Person {
 		{
 			if(uname.equals(i.getUsername()) && psswrd.equals(i.getPassword()))
 			{
+				SchedulePage.askSchedule(uname, psswrd);
+				
 				return "instructor";
 			}
 		}

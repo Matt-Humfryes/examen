@@ -12,19 +12,22 @@ import javax.swing.table.DefaultTableModel;
 import be.matt.examen.POJO.Instructor;
 import be.matt.examen.POJO.Lesson;
 import be.matt.examen.POJO.LessonType;
-import be.matt.examen.POJO.Skier;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class GetAllCourses extends JFrame {
-	
-	private Skier skier;
+public class SchedulePage extends JFrame {
+	Instructor instructor;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel model;
+	private JButton btnAddCourse;
 
-	public static void askCourses(Skier s) {
-		ArrayList<Lesson> lessons = Lesson.getCourses();
+	public static void askSchedule(String uname, String psswrd)
+	{
+		ArrayList<Lesson> lessons = Instructor.getSchedule(uname, psswrd);
 		
 		if(lessons.isEmpty())
 		{
@@ -38,7 +41,7 @@ public class GetAllCourses extends JFrame {
 		else
 		{
 			try {
-				GetAllCourses frame = new GetAllCourses(s, lessons);
+				SchedulePage frame = new SchedulePage(lessons);
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -49,9 +52,7 @@ public class GetAllCourses extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GetAllCourses(Skier s, ArrayList<Lesson> ll) {
-		skier = s;
-		
+	public SchedulePage(ArrayList<Lesson> ll) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 799, 483);
 		contentPane = new JPanel();
@@ -59,17 +60,32 @@ public class GetAllCourses extends JFrame {
 
 		setContentPane(contentPane);
 		
-		model = new DefaultTableModel(new String[]{"Instructor", "Sport's name", "Level", "For", "During", "Price", "Minimum", "Maximum", "Students"}, 0);
+		model = new DefaultTableModel(new String[]{"Sport's name", "Level", "For", "During", "Price", "Minimum", "Maximum", "Students"}, 0);
         contentPane.setLayout(null);
         table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 10, 765, 426);
+        scrollPane.setBounds(166, 10, 609, 426);
         contentPane.add(scrollPane);
+        
+        btnAddCourse = new JButton("Add a new course");
+        btnAddCourse.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+					NewCourseForm newCourseFormPage = new NewCourseForm();
+					newCourseFormPage.setVisible(true);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+        	}
+        });
+        btnAddCourse.setBounds(10, 13, 146, 21);
+        contentPane.add(btnAddCourse);
+        
+        instructor = ll.getFirst().getInstructor();
         
         for(Lesson l : ll)
         {
         	LessonType lt = l.getLessonType();
-        	Instructor i = l.getInstructor();
         	
         	String studentAge = "Adult";
         	if(lt.getChildCourse())
@@ -83,7 +99,7 @@ public class GetAllCourses extends JFrame {
         		dayTime = "Morning";
         	}
         	
-        	model.addRow(new Object[]{i.getName() + " " + i.getFirstname(), lt.getSportName(), lt.getLevel(), studentAge, dayTime, lt.getPrice(), l.getMinBookings(), l.getMaxBookings(), l.getAmountStudent()});
+        	model.addRow(new Object[]{lt.getSportName(), lt.getLevel(), studentAge, dayTime, lt.getPrice(), l.getMinBookings(), l.getMaxBookings(), l.getAmountStudent()});
         }
 	}
 
