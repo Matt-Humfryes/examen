@@ -133,4 +133,14 @@ public class Lesson {
 		
 		return list;
 	}
+	
+	public boolean isFull()
+	{
+		return amountStudent >= maxBookings;
+	}
+	
+	public int getLessonPrice()
+	{
+		return this.getLessonType().getPrice();
+	}
 }

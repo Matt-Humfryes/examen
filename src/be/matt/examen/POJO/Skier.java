@@ -58,4 +58,24 @@ public class Skier extends Person {
 		
 		return dao.create(this);
 	}
+	
+	public ArrayList<Lesson> getJoinedCourses()
+	{
+		this.resetBookingsList();
+		ArrayList<Lesson> llb = new ArrayList<Lesson>();
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Booking> dao = adf.getBookingDAO();
+		
+		for(Booking b : dao.getAll())
+		{
+			
+		}
+		
+		return llb;
+	}
+	
+	public void resetBookingsList()
+	{
+		bookings.clear();
+	}
 }

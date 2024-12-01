@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import be.matt.examen.POJO.Lesson;
@@ -49,7 +50,7 @@ public class LessonDAO extends DAO<Lesson> {
 				aID = resSet.getInt(2);
 			}
 			
-			String request = "INSERT INTO Lesson (duringMorning, studentAmount, instructorID, lessonTypeID, minBookings, maxBookings) VALUES ('" + obj.getMorning() + "','" + obj.getAmountStudent() + "','" + iID + "','" + ltID + "','" + obj.getMinBookings() + "','" + obj.getMaxBookings() + "')";
+			String request = "INSERT INTO Lesson (duringMorning, instructorID, lessonTypeID, minBookings, maxBookings) VALUES ('" + obj.getMorning() + "','" + iID + "','" + ltID + "','" + obj.getMinBookings() + "','" + obj.getMaxBookings() + "')";
 			stat = connect.createStatement();
 			
 			resL = stat.executeUpdate(request);
@@ -94,7 +95,7 @@ public class LessonDAO extends DAO<Lesson> {
 		try
 		{
 			
-			String check = "SELECT L.minBookings, L.maxBookings, L.duringMorning, L.studentAmount, LT.sport, LT.level, LT.forChildren, LT.price, L.InstructorID FROM Lesson L INNER JOIN LessonType LT ON L.LessonTypeID = LT.ID";
+			String check = "SELECT L.minBookings, L.maxBookings, L.duringMorning, LT.sport, LT.level, LT.forChildren, LT.price, L.InstructorID, L.ID FROM Lesson L INNER JOIN LessonType LT ON L.LessonTypeID = LT.ID";
 			stat = connect.createStatement();
 			
 			res = stat.executeQuery(check);
@@ -104,14 +105,33 @@ public class LessonDAO extends DAO<Lesson> {
 				int min = res.getInt(1);
 				int max = res.getInt(2);
 				boolean time = res.getBoolean(3);
-				int students = res.getInt(4);
 				
-				String sport = res.getString(5);
-				String level = res.getString(6);
-				boolean child = res.getBoolean(7);
-				int price = res.getInt(8);
+				String sport = res.getString(4);
+				String level = res.getString(5);
+				boolean child = res.getBoolean(6);
+				int price = res.getInt(7);
 				
-				int instructorId = res.getInt(9);
+				int instructorId = res.getInt(8);
+				
+				Statement stat2 = null;
+				ResultSet res2 = null;
+				
+				String amount = "SELECT B.LessonID, P.end FROM Booking B INNER JOIN Period P ON B.PeriodID = P.ID WHERE LessonID = " + res.getInt(9);
+				int students = 0;
+				
+				stat2 = connect.createStatement();
+				
+				res2 = stat2.executeQuery(amount);
+				
+				while(res2.next())
+				{
+					LocalDate date = res2.getDate(2).toLocalDate();
+					
+					if(date.isAfter(LocalDate.now()))
+					{
+						students++;
+					}
+				}
 				
 				Lesson l = new Lesson(min, max, time, sport, level, child, price, instructorId, students);
 				list.add(l);
