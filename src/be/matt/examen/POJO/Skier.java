@@ -1,5 +1,6 @@
 package be.matt.examen.POJO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import be.matt.examen.DAO.AbstractDAOFactory;
@@ -68,7 +69,7 @@ public class Skier extends Person {
 		
 		for(Booking b : dao.getAll())
 		{
-			if(b.getSkier().getUsername().equals(this.getUsername()))
+			if(b.getSkier().getUsername().equals(this.getUsername()) && b.getPeriod().getEndDate().isAfter(LocalDate.now()))
 			{
 				bookings.add(b);
 				
