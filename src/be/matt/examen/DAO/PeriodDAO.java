@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import be.matt.examen.POJO.Instructor;
 import be.matt.examen.POJO.Period;
 
 public class PeriodDAO extends DAO<Period> {
@@ -74,7 +75,36 @@ public class PeriodDAO extends DAO<Period> {
 
 	@Override
 	public Period find(int id) {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		Period p = null;
+		
+		try
+		{
+			
+			String check = "SELECT begin, end FROM Period WHERE ID = " + id;
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				LocalDate begin = res.getDate(1).toLocalDate();
+				LocalDate end = res.getDate(2).toLocalDate();
+				
+				p = new Period(begin, end);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return p;
 	}
 
 	@Override

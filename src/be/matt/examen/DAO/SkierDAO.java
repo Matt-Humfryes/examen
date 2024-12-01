@@ -73,7 +73,35 @@ public class SkierDAO extends DAO<Skier> {
 
 	@Override
 	public Skier find(int id) {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		Skier s = null;
+		
+		try
+		{
+			
+			String check = "SELECT Lastname, Firstname, Username, Age, Password FROM Skier WHERE ID = " + id;
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				String name = res.getString(1);
+				String firstname = res.getString(2);
+				String username = res.getString(3);
+				int age = res.getInt(4);
+				String password = res.getString(5);
+				
+				s = new Skier(name, firstname, password, age, username);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return s;
 	}
 
 	@Override

@@ -35,6 +35,19 @@ public class Booking {
 		s.addBooking(this);
 	}
 	
+	public Booking(int skierId, int periodId, int lessonId)
+	{
+		AbstractDAOFactory adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		DAO<Skier> daoS = adf.getSkierDAO();
+		DAO<Period> daoP = adf.getPeriodDAO();
+		DAO<Lesson> daoL = adf.getLessonDAO();
+		
+		period = daoP.find(periodId);
+		lesson = daoL.find(lessonId);
+		instructor = lesson.getInstructor();
+		skier = daoS.find(skierId);
+	}
+	
 	public Skier getSkier()
 	{
 		return skier;

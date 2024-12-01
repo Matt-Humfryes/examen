@@ -83,7 +83,60 @@ public class LessonDAO extends DAO<Lesson> {
 
 	@Override
 	public Lesson find(int id) {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		Lesson l = null;
+		
+		try
+		{
+			
+			String check = "SELECT L.minBookings, L.maxBookings, L.duringMorning, LT.sport, LT.level, LT.forChildren, LT.price, L.InstructorID, L.ID FROM Lesson L INNER JOIN LessonType LT ON L.LessonTypeID = LT.ID WHERE L.ID = " + id;
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				int min = res.getInt(1);
+				int max = res.getInt(2);
+				boolean time = res.getBoolean(3);
+				
+				String sport = res.getString(4);
+				String level = res.getString(5);
+				boolean child = res.getBoolean(6);
+				int price = res.getInt(7);
+				
+				int instructorId = res.getInt(8);
+				
+				Statement stat2 = null;
+				ResultSet res2 = null;
+				
+				String amount = "SELECT B.LessonID, P.end FROM Booking B INNER JOIN Period P ON B.PeriodID = P.ID WHERE LessonID = " + res.getInt(9);
+				int students = 0;
+				
+				stat2 = connect.createStatement();
+				
+				res2 = stat2.executeQuery(amount);
+				
+				while(res2.next())
+				{
+					LocalDate date = res2.getDate(2).toLocalDate();
+					
+					if(date.isAfter(LocalDate.now()))
+					{
+						students++;
+					}
+				}
+				
+				l = new Lesson(min, max, time, sport, level, child, price, instructorId, students);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return l;
 	}
 
 	@Override

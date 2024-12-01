@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import be.matt.examen.POJO.Booking;
+import be.matt.examen.POJO.Instructor;
 import be.matt.examen.POJO.LessonType;
 
 public class BookingDAO extends DAO<Booking> {
@@ -130,7 +131,38 @@ public class BookingDAO extends DAO<Booking> {
 
 	@Override
 	public ArrayList<Booking> getAll() {
-		return null;
+		Statement stat = null;
+		ResultSet res = null;
+		ArrayList<Booking> list = new ArrayList<Booking>();
+		
+		try
+		{
+			
+			String check = "SELECT SkierID, PeriodID, LessonID FROM Booking";
+			stat = connect.createStatement();
+			
+			res = stat.executeQuery(check);
+			
+			while(res.next())
+			{
+				int skierId = res.getInt(1);
+				int periodId = res.getInt(2);
+				int lessonId = res.getInt(3);
+				
+				Booking b = new Booking(skierId, periodId, lessonId);
+				list.add(b);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 }

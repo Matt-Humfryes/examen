@@ -68,7 +68,13 @@ public class Skier extends Person {
 		
 		for(Booking b : dao.getAll())
 		{
-			
+			if(b.getSkier().getUsername().equals(this.getUsername()))
+			{
+				bookings.add(b);
+				
+				Lesson l = bookings.getLast().getLesson();
+				llb.add(l);
+			}
 		}
 		
 		return llb;

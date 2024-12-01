@@ -67,7 +67,7 @@ public class GetAllCourses extends JFrame {
 
 		setContentPane(contentPane);
 		
-		model = new DefaultTableModel(new String[]{"Instructor", "Sport's name", "Level", "For", "During", "Price", "Minimum", "Maximum", "Students", ""}, 0);
+		model = new DefaultTableModel(new String[]{"Instructor", "Sport's name", "Level", "For", "During", "Price", "Minimum", "Maximum", "Students"}, 0);
         contentPane.setLayout(null);
         table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -121,7 +121,26 @@ public class GetAllCourses extends JFrame {
         btnSeeBookings = new JButton("See joined courses");
         btnSeeBookings.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		ArrayList<Lesson> booked = skier.getJoinedCourses();
         		
+        		if(booked.isEmpty())
+        		{
+        			try {
+        				CoursesListError error = new CoursesListError();
+        				error.setVisible(true);
+        			} catch (Exception ex) {
+        				ex.printStackTrace();
+        			}
+        		}
+        		else
+        		{
+        			try {
+        				BookingList bookings = new BookingList(booked);
+        				bookings.setVisible(true);
+        			} catch (Exception ex) {
+        				ex.printStackTrace();
+        			}
+        		}
         	}
         });
         btnSeeBookings.setBounds(199, 446, 179, 21);
@@ -144,7 +163,7 @@ public class GetAllCourses extends JFrame {
         		dayTime = "Morning";
         	}
         	
-        	model.addRow(new Object[]{i.getName() + " " + i.getFirstname(), lt.getSportName(), lt.getLevel(), studentAge, dayTime, lt.getPrice(), l.getMinBookings(), l.getMaxBookings(), l.getAmountStudent(), });
+        	model.addRow(new Object[]{i.getName() + " " + i.getFirstname(), lt.getSportName(), lt.getLevel(), studentAge, dayTime, lt.getPrice(), l.getMinBookings(), l.getMaxBookings(), l.getAmountStudent()});
         }
 	}
 
